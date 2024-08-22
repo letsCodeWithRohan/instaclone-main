@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Following | Instagram</title>
+  <title>Followers | Instagram</title>
   <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -17,7 +17,7 @@
       <a href="javascript:history.back()">
         <i class="ri-arrow-left-line text-[1.4rem]"></i>
       </a>
-      <h3 class="text-lg">{{"following"}}</h3>
+      <h3 class="text-lg">{{"followers"}}</h3>
       <div class="icons flex gap-5">
         <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
         <!-- <i class="text-[1.4rem] ri-menu-line"></i> -->
@@ -25,22 +25,27 @@
       </div>
     </div>
     <div class="users px-3">
-    {% if users|length > 0 %}
-            {% for user in users %}
-            <a href="/userprofile/{{user[0]}}" class="outline-none">
-                <div class="dark:text-white flex items-center gap-2 mt-5">
-                    <div class="image w-[13vw] h-[13vw] rounded-full bg-sky-100 overflow-hidden">
-                        <img src="{{url_for('static',filename=user[3])}}" alt="">
-                        </div>
-                    <div class="text">
-                        <h3 class="text-xl">{{ user[1] }}</h3>
-                        <h4 class="text-sm opacity-30 leading-none">{{ user[2] }}</h4>
-                    </div>
-                </div>            
-            </a>
-            {% endfor %}
-            {% endif %}
+      {% if users|length > 0 %}
+      {% for user in users %}
+      <a href="/userprofile/{{user[0]}}" class="outline-none">
+        <div class="dark:text-white flex items-center gap-2 mt-5">
+          <div class="image w-[13vw] h-[13vw] rounded-full bg-sky-100 overflow-hidden">
+            <img src="{{url_for('static',filename=user[3])}}" alt="">
+          </div>
+          <div class="text">
+            <h3 class="text-xl">{{ user[1] }}</h3>
+            <h4 class="text-sm opacity-30 leading-none">{{ user[2] }}</h4>
+          </div>
         </div>
+      </a>
+      {% endfor %}
+      {% else %}
+      <div class="w-full flex justify-center items-center h-[90vh]">
+        <small class="opacity-50">no followers yet.</small>
+      </div>
+
+      {% endif %}
+    </div>
   </div>
   <div
     class="footer shadow-md border-t-[1px] bg-white border-[#ddd] dark:text-white flex justify-between items-center w-full fixed bottom-0 z-[10] dark:bg-zinc-900 px-10 py-3">

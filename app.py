@@ -268,6 +268,13 @@ def following(id):
     data = cursor.fetchall()
     return render_template("following.html",users=data)
 
+@app.route("/followers/<int:id>/")
+def followers(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT users.id, users.username, users.name, users.picture FROM follows JOIN users ON users.id = follows.follower_id WHERE follows.followed_id = %s",(id,))
+    data = cursor.fetchall()
+    return render_template("followers.html",users=data)
+
 @app.route("/logout/")
 def logout():
     if "username" in session:
