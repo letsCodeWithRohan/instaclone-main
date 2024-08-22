@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Instagram</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="">
+  <div class="w-full relative min-h-screen dark:bg-zinc-900 bg-white dark:text-white py-5 flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center gap-5 px-4">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="absolute top-0 left-0 w-full z-50 h-screen bg-transparent flex items-center justify-center" id="flash">
+                  <div class="msg justify-center shadow-lg gap-2 rounded-md w-[300px] h-[200px] flex flex-col bg-white items-center">
+                    <p class="text-[black] text-2xl font-bold">{{message}}<p>
+                    <p id="cls" class="w-3/4 text-center rounded-md text-white bg-sky-500 p-2">OK</p>
+                  </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+      <img class="w-1/2 dark:invert-0 invert" src="{{url_for('static',filename='images/logo.png')}}" alt="">
+      <form class="w-full" action="/login" method="post">
+        <input class="px-3 mt-2 py-2 border-2 bg-white border-[#ddd] dark:border-zinc-800 rounded-md block w-full dark:bg-zinc-900" type="text" placeholder="username" name="username">
+        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="password" placeholder="password" name="password">
+        <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2 text-white" type="submit" value="Log In">
+      </form>
+      <span>Don't have an account ? <a href="/" class="text-blue-500">Sign Up</a></span>
+    </div>
+  </div>
+  <div class="footer hidden text-white flex justify-between items-center w-full fixed bottom-0 z-[10] bg-zinc-900 px-10 py-3">
+    <a href="/feed"><i class="text-[1.4rem] ri-home-line"></i></a>
+    <a href="/search"><i class="text-[1.4rem] ri-search-line"></i></a>
+    <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
+    <a href="/profile">
+      <div class="w-8 h-8 bg-zinc-300 rounded-full overflow-hidden">
+        <img class="w-full h-full object-cover" src="/images/uploads/<%= user.picture %>" alt="">
+      </div>
+    </a>
+  </div>
+  <script>
+    let flash = document.querySelector("#flash")
+    let closeBtn = document.querySelector("#cls")
+
+    closeBtn.addEventListener("click",()=>{
+      flash.style.display = "None";
+    })
+  </script>
+  </body>
+  </html>

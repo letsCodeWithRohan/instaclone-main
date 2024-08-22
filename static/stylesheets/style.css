@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+.story::-webkit-scrollbar{
+  display: none;
+}
+
+body,head{
+  font-family: 'Outfit';
+}
+
+a:focus {
+  outline: none !important;
+}
