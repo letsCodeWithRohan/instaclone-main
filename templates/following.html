@@ -25,22 +25,26 @@
       </div>
     </div>
     <div class="users px-3">
-    {% if users|length > 0 %}
-            {% for user in users %}
-            <a href="/userprofile/{{user[0]}}" class="outline-none">
-                <div class="dark:text-white flex items-center gap-2 mt-5">
-                    <div class="image w-[13vw] h-[13vw] rounded-full bg-sky-100 overflow-hidden">
-                        <img src="{{url_for('static',filename=user[3])}}" alt="">
-                        </div>
-                    <div class="text">
-                        <h3 class="text-xl">{{ user[1] }}</h3>
-                        <h4 class="text-sm opacity-30 leading-none">{{ user[2] }}</h4>
-                    </div>
-                </div>            
-            </a>
-            {% endfor %}
-            {% endif %}
+      {% if users|length > 0 %}
+      {% for user in users %}
+      <a href="/userprofile/{{user[0]}}" class="outline-none">
+        <div class="dark:text-white flex items-center gap-2 mt-5">
+          <div class="image w-[13vw] h-[13vw] rounded-full bg-sky-100 overflow-hidden">
+            <img src="{{url_for('static',filename=user[3])}}" alt="">
+          </div>
+          <div class="text">
+            <h3 class="text-xl">{{ user[1] }}</h3>
+            <h4 class="text-sm opacity-30 leading-none">{{ user[2] }}</h4>
+          </div>
         </div>
+      </a>
+      {% endfor %}
+      {% else %}
+      <div class="w-full flex justify-center items-center h-[90vh]">
+        <small class="opacity-50">no followers yet.</small>
+      </div>
+      {% endif %}
+    </div>
   </div>
   <div
     class="footer shadow-md border-t-[1px] bg-white border-[#ddd] dark:text-white flex justify-between items-center w-full fixed bottom-0 z-[10] dark:bg-zinc-900 px-10 py-3">
