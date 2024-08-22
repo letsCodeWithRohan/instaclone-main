@@ -260,7 +260,7 @@ def unfollow(id):
         cursor.close()
         return redirect(url_for("user_profile",id=id))
     
-# Under construction
+# Under construction working
 @app.route("/following/<int:id>/")
 def following(id):
     cursor = mysql.connection.cursor()
