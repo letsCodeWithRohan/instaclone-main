@@ -1,5 +1,7 @@
 HQ instagram clone
 
+```SQL
+
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255),
@@ -10,6 +12,7 @@ CREATE TABLE users (
   contact VARCHAR(255) DEFAULT '1234567890',
   bio TEXT DEFAULT 'No bio added'
 );
+```
 
 CREATE TABLE posts (
   id INT AUTO_INCREMENT PRIMARY KEY,
