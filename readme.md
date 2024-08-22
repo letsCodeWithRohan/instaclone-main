@@ -1,7 +1,51 @@
-HQ instagram clone
+# Instagram-Clone
+Insta Clone Flask Project
+
+<h3>Folder Structure</h3>
+<pre>
+Instagram
+|--static
+  |--stylesheets
+  |--uploads
+  |--images
+|--templates
+  |-feed.html
+  |-profile.html
+  |-userprofile.html
+  ....
+|-app.py
+</pre>
+
+## Setup
+
+<h4>Step-1</h4>
+<p>Create new Folder and create virtual environment</p>
+
+```html
+virtualenv .venv
+```
+<p>OR</p>
+
+```python
+python -m venv .venv
+```
+<h4>Step-2</h4>
+<p>Activate Virtual Environment</p>
+
+```bash
+.venv\Scripts\activate
+```
+
+<h4>Step-3</h4>
+<p>Install Modules/Packages</p>
+
+```html
+pip install flask flask-mysqldb
+```
+
+<h4>Database and table setup</h4>
 
 ```SQL
-
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255),
@@ -14,6 +58,7 @@ CREATE TABLE users (
 );
 ```
 
+```SQL
 CREATE TABLE posts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -22,7 +67,9 @@ CREATE TABLE posts (
   picture VARCHAR(255),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+```
 
+```SQL
 CREATE TABLE follows (
   id INT AUTO_INCREMENT PRIMARY KEY,
   follower_id INT NOT NULL,
@@ -32,7 +79,9 @@ CREATE TABLE follows (
   FOREIGN KEY (followed_id) REFERENCES users(id),
   UNIQUE KEY unique_follow (follower_id, followed_id)
 );
+```
 
+```SQL
 CREATE TABLE likes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -42,7 +91,11 @@ CREATE TABLE likes (
   FOREIGN KEY (post_id) REFERENCES posts(id),
   UNIQUE KEY unique_like (user_id, post_id)
 );
+```
 
+<p>Optional</p>
+
+```SQL
 SELECT 
     users.id AS user_id,
     users.username,
@@ -55,3 +108,4 @@ FROM
     users
 JOIN 
     posts ON users.id = posts.user_id;
+```
