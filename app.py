@@ -38,6 +38,16 @@ def get_userdata(id):
     }
     return data
 
+def get_posts(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT post_id from likes WHERE user_id = %s",(id,))
+    liked_posts = cursor.fetchall()
+    postarr = []
+    for post in liked_posts :
+        for i in post :
+            postarr.append(i)
+    return postarr
+
 @app.route("/",methods=["GET","POST"])
 def index() :
     if request.method == "GET" :
@@ -85,12 +95,13 @@ def feed() :
         return redirect(url_for("login"))
     else: 
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT users.id,users.username,users.picture,posts.id,posts.caption,posts.date, posts.picture FROM users JOIN posts ON users.id = posts.user_id ORDER BY posts.date DESC;")
+        cursor.execute("SELECT users.id, users.username, users.picture, posts.id AS post_id, posts.caption, posts.date, posts.picture AS post_picture, COUNT(likes.id) AS like_count FROM users JOIN posts ON users.id = posts.user_id LEFT JOIN likes ON posts.id = likes.post_id GROUP BY posts.id ORDER BY posts.date DESC;")
         data = cursor.fetchall()
         cursor.execute("SELECT * FROM users WHERE username = %s",(session["username"],))
         userdata = cursor.fetchone()
         cursor.close()
-        return render_template("feed.html",postdata=list(data),userdata=list(userdata))
+        liked_posts = get_posts(session["id"])
+        return render_template("feed.html",liked_posts=liked_posts,postdata=list(data),userdata=list(userdata))
 
 @app.route("/post",methods=["GET","POST"])
 def post_upload():
@@ -156,6 +167,18 @@ def like(post_id):
         mysql.connection.commit()
         cursor.close()
         return redirect(request.referrer)
+    
+@app.route("/dislike/<int:post_id>")
+def dislike(post_id):
+    if "id" not in session:
+        flash("Please Login First")
+        return redirect(url_for("login"))
+    else:
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM likes WHERE user_id = %s AND post_id = %s;",(session["id"],post_id))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(request.referrer)
 
 @app.route("/profile_flex/")
 def profile_flex() :
@@ -166,14 +189,15 @@ def profile_flex() :
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM users WHERE username = %s",(session["username"],))
         userdata = cursor.fetchone()
-        cursor.execute("SELECT users.id,users.username,users.picture,posts.id,posts.caption,posts.date, posts.picture FROM users JOIN posts ON users.id = posts.user_id WHERE users.id = %s ORDER BY posts.date DESC",(session["id"],))
+        cursor.execute("SELECT users.id AS user_id, users.username, users.picture AS user_picture, posts.id AS post_id, posts.caption, posts.date, posts.picture AS post_picture, COUNT(likes.id) AS like_count FROM users JOIN posts ON users.id = posts.user_id LEFT JOIN likes ON posts.id = likes.post_id WHERE users.id = %s GROUP BY posts.id ORDER BY posts.date DESC;",(session["id"],))
         userposts = cursor.fetchall()
         cursor.execute("SELECT COUNT(follower_id) FROM `follows` WHERE follower_id=%s",(session["id"],))
         following_count = cursor.fetchone()
         cursor.execute("SELECT COUNT(followed_id) FROM `follows` WHERE followed_id=%s",(session["id"],))
         follower_count = cursor.fetchone()
+        liked_posts = get_posts(session["id"])
         cursor.close()
-        return render_template("profile_flex.html",following_count=following_count,follower_count=follower_count,userdata=userdata,userposts=list(userposts))
+        return render_template("profile_flex.html",liked_posts=liked_posts,following_count=following_count,follower_count=follower_count,userdata=userdata,userposts=list(userposts))
 
 
 @app.route("/edit/")
@@ -240,7 +264,7 @@ def user_profile_flex(id):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM users WHERE id = %s",(id,))
     userdata = cursor.fetchone()
-    cursor.execute("SELECT users.id,users.username,users.picture,posts.id,posts.caption,posts.date, posts.picture FROM users JOIN posts ON users.id = posts.user_id WHERE users.id = %s ORDER BY posts.date DESC",(id,))
+    cursor.execute("SELECT users.id AS user_id, users.username, users.picture AS user_picture, posts.id AS post_id, posts.caption, posts.date, posts.picture AS post_picture, COUNT(likes.id) AS like_count FROM users JOIN posts ON users.id = posts.user_id LEFT JOIN likes ON posts.id = likes.post_id WHERE users.id = %s GROUP BY posts.id ORDER BY posts.date DESC;",(id,))
     userposts = cursor.fetchall()
     cursor.execute("SELECT * FROM follows WHERE follower_id=%s AND followed_id=%s",(session["id"],id))
     followed = cursor.fetchone()
@@ -249,8 +273,9 @@ def user_profile_flex(id):
     cursor.execute("SELECT COUNT(followed_id) FROM `follows` WHERE followed_id=%s",(id,))
     follower_count = cursor.fetchone()
     cursor.close()
+    liked_posts = get_posts(session["id"])
     owndata = get_owndata()
-    return render_template("userprofile_flex.html",userdata=userdata,userposts=userposts,followed=followed,owndata=owndata,following_count=following_count,follower_count=follower_count)
+    return render_template("userprofile_flex.html",liked_posts=liked_posts,userdata=userdata,userposts=userposts,followed=followed,owndata=owndata,following_count=following_count,follower_count=follower_count)
 
 
 @app.route("/follow/<int:id>")

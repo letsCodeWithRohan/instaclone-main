@@ -57,7 +57,7 @@
     </div>
     <div class="posts w-full flex gap-1 py-2 mt-1 flex-wrap mb-[40px]">
       {% if userposts and userposts|length > 0 %}
-      {% for user_id,username,profile,post_id,caption,date,postURL in userposts %}
+      {% for user_id,username,profile,post_id,caption,date,postURL,like_count in userposts %}
       <div class="post mt-5 w-full min-h-[50vh]">
         <div class="title px-4 flex items-center gap-2">
           <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
@@ -77,21 +77,24 @@
         <!-- Likes Section -->
         <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
           <div class="flex gap-3 mt-2">
+            {% if post_id not in liked_posts %}
             <a href="/like/{{post_id}}">
               <i class="heart ri-heart-3-line"></i>
             </a>
+            {% else %}
             <a href="/dislike/{{post_id}}">
               <i class="heart ri-heart-3-fill text-red-500"></i>
             </a>
+            {% endif %}
             <i class="ri-chat-3-line"></i>
             <i class="ri-share-circle-line"></i>
           </div>
-          <i data-postid="<%= post.id %>" class="save ri-bookmark-line"></i>
+          <i data-postid="{{post_id}}" class="save ri-bookmark-line"></i>
           <!-- <i data-postid="<%= post.id %>" class="save ri-bookmark-fill text-zinc-100"></i> -->
         </div>
         <!-- Likes Section Over -->
         <h3 class="likeval px-4 mt-2 text-sm leading-none tracking-tight">
-          {{ "0" }} likes
+          {{ like_count }} likes
         </h3>
         <h2 class="dark:text-white font-light text-sm mt-2">
           <span class="font-semibold pl-4 pr-2">

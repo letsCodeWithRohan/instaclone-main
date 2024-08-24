@@ -102,10 +102,19 @@ SELECT
     users.picture AS user_picture,
     posts.id AS post_id,
     posts.caption,
-    posts.date AS post_date,
-    posts.picture AS post_picture
+    posts.date,
+    posts.picture AS post_picture,
+    COUNT(likes.id) AS like_count
 FROM 
     users
 JOIN 
-    posts ON users.id = posts.user_id;
+    posts ON users.id = posts.user_id
+LEFT JOIN 
+    likes ON posts.id = likes.post_id
+WHERE 
+    users.id = 7
+GROUP BY 
+    posts.id
+ORDER BY 
+    posts.date DESC;
 ```
