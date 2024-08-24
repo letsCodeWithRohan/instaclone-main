@@ -21,6 +21,23 @@ def get_owndata():
     mycursor.close()
     return userdata
 
+def get_userdata(id):
+    mycursor = mysql.connection.cursor()
+    mycursor.execute("SELECT * FROM users WHERE id = %s",(id,))
+    userdata = mycursor.fetchone()
+    mycursor.close()
+    data = {
+        "id":userdata[0],
+        "username":userdata[1],
+        "name":userdata[2],
+        "email":userdata[3],
+        "password":userdata[4],
+        "profile":userdata[5],
+        "mobile":userdata[6],
+        "bio":userdata[7],
+    }
+    return data
+
 @app.route("/",methods=["GET","POST"])
 def index() :
     if request.method == "GET" :
@@ -266,14 +283,16 @@ def following(id):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT users.id,users.username,users.name,users.picture FROM follows JOIN users ON users.id = follows.followed_id WHERE follower_id = %s",(id,))
     data = cursor.fetchall()
-    return render_template("following.html",users=data)
+    userdata = get_userdata(id)
+    return render_template("following.html",users=data,userdata=userdata)
 
 @app.route("/followers/<int:id>/")
 def followers(id):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT users.id, users.username, users.name, users.picture FROM follows JOIN users ON users.id = follows.follower_id WHERE follows.followed_id = %s",(id,))
     data = cursor.fetchall()
-    return render_template("followers.html",users=data)
+    userdata = get_userdata(id)
+    return render_template("followers.html",users=data,userdata=userdata)
 
 @app.route("/logout/")
 def logout():
