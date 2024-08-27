@@ -67,25 +67,26 @@ def login():
         return render_template("login.html")
     else:
         data = request.form
-        username = data["username"]
+        email = data["email"]
         password = data["password"]
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT id, username, password FROM users WHERE username = %s", (username,))
+        cursor.execute("SELECT id, username, password,email FROM users WHERE email = %s", (email,))
         resp = cursor.fetchone()
         cursor.close()
         if resp :
-            db_id,db_username,db_password = resp
-            if db_username == username and db_password==password :
+            db_id,db_username,db_password,db_email = resp
+            if db_email == email and db_password==password :
                 session["id"] = str(db_id)
                 session["username"] = db_username
                 session["password"] = db_password
+                session["email"] = db_email
                 return redirect(url_for("feed"))
-            elif db_username == username and db_password!=password :
+            elif db_email == email and db_password!=password :
                 flash("Password Not Matched")
             else:
                 flash("No Account Found")
         else:
-            flash("username doesn't exists")
+            flash("email doesn't exists")
         return redirect(url_for('login'))
 
 @app.route("/feed/")
@@ -319,10 +320,15 @@ def followers(id):
     userdata = get_userdata(id)
     return render_template("followers.html",users=data,userdata=userdata)
 
+@app.route("/delete_post/<int:id>/")
+def delete_post(id):
+    return "Deleting post %s" % id
+
 @app.route("/logout/")
 def logout():
     if "username" in session:
         session.pop("id",None)
+        session.pop("email",None)
         session.pop("username",None)
         session.pop("password",None)
         return redirect(url_for("login"))
