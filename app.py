@@ -322,7 +322,12 @@ def followers(id):
 
 @app.route("/delete_post/<int:id>/")
 def delete_post(id):
-    return "Deleting post %s" % id
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM likes WHERE post_id = %s",(id,))
+    cursor.execute("DELETE FROM posts WHERE id = %s",(id,))
+    mysql.connection.commit()
+    cursor.close()
+    return redirect(url_for("profile_flex"))
 
 @app.route("/logout/")
 def logout():
