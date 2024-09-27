@@ -70,15 +70,15 @@ def login():
         email = data["email"]
         password = data["password"]
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT id, username, password,email FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT id, username, password,email,picture FROM users WHERE email = %s", (email,))
         resp = cursor.fetchone()
         cursor.close()
         if resp :
-            db_id,db_username,db_password,db_email = resp
+            db_id,db_username,db_password,db_email,db_profile = resp
             if db_email == email and db_password==password :
                 session["id"] = str(db_id)
                 session["username"] = db_username
-                session["password"] = db_password
+                session["profile"] = db_profile
                 session["email"] = db_email
                 return redirect(url_for("feed"))
             elif db_email == email and db_password!=password :
@@ -335,7 +335,7 @@ def logout():
         session.pop("id",None)
         session.pop("email",None)
         session.pop("username",None)
-        session.pop("password",None)
+        session.pop("profile",None)
         return redirect(url_for("login"))
     else :
         return redirect(url_for("login"))

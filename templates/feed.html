@@ -91,16 +91,7 @@
         {% endfor %}
     </div>
   </div>
-  <div class="footer dark:text-white bg-white flex justify-between items-center w-screen fixed bottom-0 z-[10] dark:bg-zinc-900 px-10 py-3">
-    <a href="/feed"><i class="text-[1.4rem] ri-home-line"></i></a>
-    <a href="/search"><i class="text-[1.4rem] ri-search-line"></i></a>
-    <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
-    <a href="/profile">
-      <div class="w-8 h-8 bg-zinc-300 rounded-full overflow-hidden">
-        <img class="w-full h-full object-cover" src="{{url_for('static',filename=userdata[5])}}" alt="">
-      </div>
-    </a>
-  </div>
+  {% include 'partials/footer.html' %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
     integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
