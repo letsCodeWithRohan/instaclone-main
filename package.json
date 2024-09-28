@@ -1,0 +1,16 @@
+{
+  "name": "instaclone-main",
+  "version": "1.0.0",
+  "description": "Insta Clone Flask Project",
+  "main": "index.js",
+  "scripts": {
+    "watchcss":"npx tailwindcss -i ./static/stylesheets/input.css -o ./static/stylesheets/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  }
+}
