@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | Instagram</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
+</head>
+
+<body class="font-[Outfit]">
+    <div class="w-full flex flex-col justify-between overflow-hidden h-[100dvh] bg-white dark:bg-zinc-900 dark:text-white">
+        <!-- Top Bar -->
+        <div class="nav flex items-center px-4 py-2 gap-3 shadow-md">
+            <a href="/message/">
+                <i class="ri-arrow-left-line text-[1.4rem]"></i>
+            </a>
+            <img src="{{url_for('static',filename=userdata['profile'])}}"
+                class="w-[40px] h-[40px] object-center object-cover rounded-full" alt="">
+            <h3 class="text-lg">{{userdata["username"]}}</h3>
+        </div>
+
+        <!-- Main -->
+        <main class="message-div overflow-y-auto p-2 items-end gap-2 justify-end flex-1 flex flex-col">
+            {% for msg in data %}
+            <p class="py-2 px-3 bg-violet-700 text-white w-max rounded-full text-wrap">{{msg[0]}}</p>
+            {% endfor %}
+        </main>
+        <!-- Bottom Bar -->
+        <form action="/send" method="post"
+            class="dark:bg-zinc-800 bottom-div w-[96%] mx-[2%] ps-4 gap-3 p-2 flex justify-between bg-slate-200 items-center rounded-full my-[10px]">
+            <input type="text" name="message" placeholder="Message..."
+                class="text-black dark:text-white py-1 px-2 flex-1 bg-transparent border-0 outline-0">
+            <button onclick="submitHandler()" type="submit"
+                class="text-[1.4rem] w-[40px] bg-sky-400 text-white rounded-full h-[40px]">
+                <i class="ri-send-plane-fill"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function submitHandler() {
+            const data = document.querySelector('input').value;
+            let p = document.createElement('p');
+            classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap']
+            classes.forEach(element => {
+                p.classList.add(element)
+            });
+            p.innerHTML = data;
+            document.querySelector('.message-div').append(p);
+            document.querySelector('form').submit();
+            // document.querySelector('input').value = '';
+        }
+
+        document.querySelector('input').addEventListener('keypress', (e) => {
+            if (e.key === "Enter") {
+                let p = document.createElement('p');
+                classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap']
+                classes.forEach(element => {
+                    p.classList.add(element)
+                });
+                p.innerHTML = e.target.value;
+                document.querySelector('.message-div').append(p);
+                // document.querySelector('input').value = '';
+            document.querySelector('form').submit();
+            }
+        })
+
+        function fetchData() {
+    fetch('http://192.168.179.86:5000/get_msg') // Replace with your API URL
+        .then(response => response.json())
+        .then(data => {
+            const container = document.querySelector('.message-div');
+            container.innerHTML = ''; // Clear previous messages if needed
+
+            data.forEach(elm => {
+                let p = document.createElement('p');
+                const classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap'];
+                
+                classes.forEach(className => {
+                    p.classList.add(className);
+                });
+                
+                p.innerHTML = elm.message;
+                container.appendChild(p); // Append each <p> directly to the container
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+// Fetch data every 2 seconds (2000 milliseconds)
+setInterval(fetchData, 2000);
+
+    </script>
+</body>
+
+</html>

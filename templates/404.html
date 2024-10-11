@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Instagram</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
+</head>
+<body class="flex md:flex-row gap-3 justify-center bg-white md:gap-10 dark:bg-zinc-900 items-center h-[100dvh] flex-col">
+    <img src="{{url_for('static',filename='images/error.png')}}" class="h-[300px] md:h-[500px] object-cover object-center" alt="">
+    <div class="flex flex-col gap-3 items-center">
+        <h1 class="font-bold text-2xl md:text-4xl dark:text-white">I think you are lost !</h1>
+        <h3 class="font-semibold text-lg md:text-2xl dark:text-white">Page Not Found</h3>
+        <a href="/feed" class="dark:text-white hover:bg-violet-800 hover:text-white py-2 px-4 rounded-full bg-slate-100 dark:bg-zinc-700">Go to Home</a>
+    </div>
+</body>
+</html>

@@ -14,6 +14,11 @@ app.config['MYSQL_DB'] = 'instagram'
 mysql = MySQL(app)
 app.secret_key = "Insta Clone"
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
 def get_owndata():
     mycursor = mysql.connection.cursor()
     mycursor.execute("SELECT * FROM users WHERE username = %s",(session["username"],))
@@ -328,6 +333,33 @@ def delete_post(id):
     mysql.connection.commit()
     cursor.close()
     return redirect(url_for("profile_flex"))
+
+@app.route("/chat/<int:id>/")
+def chat(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT username,picture FROM users WHERE id = %s",(id,))
+    data = cursor.fetchone()
+    userdata = {}
+    userdata["id"] = id
+    userdata["username"] = data[0]
+    userdata["profile"] = data[1]
+    return render_template("chat.html",userdata=userdata)
+
+@app.route("/message/")
+def message():
+    cursor = mysql.connection.cursor()
+    query = "SELECT users.id, users.name, users.picture FROM users WHERE users.id IN (SELECT follower_id FROM follows WHERE followed_id = %s UNION SELECT followed_id FROM follows WHERE follower_id = %s)"
+    cursor.execute(query,(session['id'],session['id']))
+    msg_users = cursor.fetchall()
+    user_list = []
+    for user in msg_users:
+        dct = {}
+        dct["id"] = user[0]
+        dct["name"] = user[1]
+        dct["profile"] = user[2]
+        user_list.append(dct)
+        cursor.close()
+    return render_template("message.html",users=user_list)
 
 @app.route("/logout/")
 def logout():
