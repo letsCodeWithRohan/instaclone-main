@@ -1,8 +1,11 @@
 from flask import Flask,render_template,flash,session,request,redirect,url_for
 from flask_mysqldb import MySQL
+from flask_socketio import SocketIO,join_room,leave_room,send
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 app.config["UPLOAD_FOLDER"] = "static/uploads/"
 
@@ -13,6 +16,8 @@ app.config['MYSQL_DB'] = 'instagram'
 
 mysql = MySQL(app)
 app.secret_key = "Insta Clone"
+
+socketio=SocketIO(app)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -343,7 +348,26 @@ def chat(id):
     userdata["id"] = id
     userdata["username"] = data[0]
     userdata["profile"] = data[1]
-    return render_template("chat.html",userdata=userdata)
+    return render_template("chat.html",userdata=userdata,user_id=id,loggedInId=session["id"])
+
+@socketio.on('join')
+def on_join(data):
+    room = get_room_name(data['user_id'], data['other_user_id'])
+    join_room(room)
+    send(f"{data['username']} has joined the room.", to=room)
+
+@socketio.on('message')
+def handle_message(data):
+    room = get_room_name(data['user_id'], data['other_user_id'])
+    cursor = mysql.connection.cursor()
+    query = "INSERT INTO messages (sender_id, receiver_id, message) VALUES (%s, %s, %s)"
+    cursor.execute(query, (data['user_id'], data['other_user_id'], data['message']))
+    mysql.connection.commit()
+    send({'user_id': data['user_id'], 'message': data['message']}, to=room)
+
+def get_room_name(user1, user2):
+    # Generate a unique room name based on the two user IDs
+    return f"room_{min(user1, user2)}_{max(user1, user2)}"
 
 @app.route("/message/")
 def message():
@@ -373,4 +397,4 @@ def logout():
         return redirect(url_for("login"))
 
 if __name__ == "__main__" :
-    app.run(debug=True,host='0.0.0.0')
+    socketio.run(app, debug=True,host='0.0.0.0')

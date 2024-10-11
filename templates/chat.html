@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 </head>
 
-<body class="font-[Outfit]">
-    <div class="w-full flex flex-col justify-between overflow-hidden h-[100dvh] bg-white dark:bg-zinc-900 dark:text-white">
+<body class="font-[Outfit] relative">
+    <div class="w-full overflow-y-auto flex flex-col justify-between overflow-hidden h-[100dvh] bg-white dark:bg-zinc-900 dark:text-white">
         <!-- Top Bar -->
-        <div class="nav flex items-center px-4 py-2 gap-3 shadow-md">
+        <div class="nav flex z-60 items-center px-4 absolute top-2 w-full left-0 py-2 gap-3 shadow-md">
             <a href="/message/">
                 <i class="ri-arrow-left-line text-[1.4rem]"></i>
             </a>
@@ -24,77 +24,79 @@
         </div>
 
         <!-- Main -->
-        <main class="message-div overflow-y-auto p-2 items-end gap-2 justify-end flex-1 flex flex-col">
-            {% for msg in data %}
-            <p class="py-2 px-3 bg-violet-700 text-white w-max rounded-full text-wrap">{{msg[0]}}</p>
-            {% endfor %}
+        <main class="z-4 message-div px-3 py-[85px] md:px-5 items-end gap-2 justify-end flex-1 flex flex-col">
+            
         </main>
         <!-- Bottom Bar -->
-        <form action="/send" method="post"
-            class="dark:bg-zinc-800 bottom-div w-[96%] mx-[2%] ps-4 gap-3 p-2 flex justify-between bg-slate-200 items-center rounded-full my-[10px]">
-            <input type="text" name="message" placeholder="Message..."
+        <form
+            class="dark:bg-zinc-800 z-50 absolute bottom-2 left-0 bottom-div w-[96%] mx-[2%] ps-4 gap-3 p-2 flex justify-between bg-slate-200 items-center rounded-full my-[10px]">
+            <input type="text" id="messageInput" name="message" placeholder="Message..."
                 class="text-black dark:text-white py-1 px-2 flex-1 bg-transparent border-0 outline-0">
-            <button onclick="submitHandler()" type="submit"
+            <button id="sendBtn" type="button"
                 class="text-[1.4rem] w-[40px] bg-sky-400 text-white rounded-full h-[40px]">
-                <i class="ri-send-plane-fill"></i>
+                <i class="ri-send-plane-fill text-[1.4rem]"></i>
             </button>
         </form>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        function submitHandler() {
-            const data = document.querySelector('input').value;
-            let p = document.createElement('p');
-            classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap']
-            classes.forEach(element => {
-                p.classList.add(element)
-            });
-            p.innerHTML = data;
-            document.querySelector('.message-div').append(p);
-            document.querySelector('form').submit();
-            // document.querySelector('input').value = '';
+        const socket = io.connect('http://192.168.179.86:5000');
+    
+    const userId = "{{ loggedInId }}";
+    const otherUserId = "{{ user_id }}";
+
+    // Join the room when the page loads
+    socket.emit('join', {
+        user_id: userId,
+        other_user_id: otherUserId,
+        username: "{{ session['username'] }}" // Use logged-in username or similar
+    });
+
+    // Listen for incoming messages
+    socket.on('message', function(data) {
+        // Only create a new message element if the message is not empty
+        if (data.message && data.message.trim() !== '') {
+        const messageDiv = document.createElement('p');
+        // Check if the message is from the logged-in user or the other user
+        if (data.user_id === userId) {
+            // Styles for the logged-in user's messages
+            messageDiv.classList.add('py-2', 'px-3', 'z-30','bg-violet-700', 'text-white', 'rounded-tl-full', 'rounded-tr-full', 'rounded-bl-full', 'self-end', 'text-wrap');
+        } else {
+            // Styles for the other user's messages
+            messageDiv.classList.add('py-2', 'px-3', 'z-30','dark:bg-zinc-700','dark:text-white','bg-slate-200', 'text-black', 'rounded-tr-full', 'rounded-tl-full', 'rounded-br-full', 'self-start', 'text-wrap');
         }
+        messageDiv.textContent = data.message;
+        document.querySelector('.message-div').appendChild(messageDiv);
+    }});
 
-        document.querySelector('input').addEventListener('keypress', (e) => {
-            if (e.key === "Enter") {
-                let p = document.createElement('p');
-                classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap']
-                classes.forEach(element => {
-                    p.classList.add(element)
-                });
-                p.innerHTML = e.target.value;
-                document.querySelector('.message-div').append(p);
-                // document.querySelector('input').value = '';
-            document.querySelector('form').submit();
-            }
-        })
-
-        function fetchData() {
-    fetch('http://192.168.179.86:5000/get_msg') // Replace with your API URL
-        .then(response => response.json())
-        .then(data => {
-            const container = document.querySelector('.message-div');
-            container.innerHTML = ''; // Clear previous messages if needed
-
-            data.forEach(elm => {
-                let p = document.createElement('p');
-                const classes = ['py-2', 'px-3', 'bg-violet-700', 'text-white', 'w-max', 'rounded-full', 'text-wrap'];
-                
-                classes.forEach(className => {
-                    p.classList.add(className);
-                });
-                
-                p.innerHTML = elm.message;
-                container.appendChild(p); // Append each <p> directly to the container
+    // Send a message to the server
+    function sendMessage() {
+        const messageInput = document.querySelector('#messageInput');
+        const message = messageInput.value.trim();
+        if (message) {
+            socket.emit('message', {
+                user_id: userId,
+                other_user_id: otherUserId,
+                message: message
             });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
+            messageInput.value = ''; // Clear the input
+        }
+    }
 
-// Fetch data every 2 seconds (2000 milliseconds)
-setInterval(fetchData, 2000);
+    // Add click event for the send button
+    document.querySelector('#sendBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        sendMessage();
+    });
 
+    // Add keypress event for the Enter key in the input field
+    document.querySelector('#messageInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+        
     </script>
 </body>
-
 </html>
