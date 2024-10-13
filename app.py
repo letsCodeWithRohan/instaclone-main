@@ -70,6 +70,7 @@ def index() :
         cursor.execute(q2,(data["username"],data["name"],data["email"],data["password"]))
         mysql.connection.commit()
         cursor.close()
+        flash("Registered Successfully")
         return redirect(url_for("login"))
 
 @app.route("/login/",methods=["GET","POST"])

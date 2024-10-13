@@ -1,33 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Instagram</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Instagram</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 
 </head>
+
 <body class="">
-  <div class="w-full relative min-h-screen dark:bg-zinc-900 bg-white dark:text-white py-5 flex flex-col items-center justify-center">
+  <div
+    class="w-full relative min-h-screen dark:bg-zinc-900 bg-white dark:text-white py-5 flex flex-col items-center justify-center">
     <div class="flex flex-col items-center gap-5 px-4">
       {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="absolute top-0 left-0 w-full z-50 h-screen bg-transparent flex items-center justify-center" id="flash">
-                  <div class="msg justify-center shadow-lg gap-2 rounded-md w-[300px] h-[200px] flex flex-col bg-white items-center">
-                    <p class="text-[black] text-2xl font-bold">{{message}}<p>
-                    <p id="cls" class="w-3/4 text-center rounded-md text-white bg-sky-500 p-2">OK</p>
-                  </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+      {% if messages %}
+      {% for message in messages %}
+      <div class="absolute top-0 left-0 w-full z-50 h-screen bg-transparent flex items-center justify-center"
+        id="flash">
+        <div
+          class="msg justify-center shadow-lg gap-2 rounded-md w-[300px] h-[200px] flex flex-col bg-white items-center">
+          <p class="text-[black] text-2xl font-bold">{{message}}
+          <p>
+          <p id="cls" class="w-3/4 text-center rounded-md text-white bg-sky-500 p-2">OK</p>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
       <img class="w-1/2 dark:invert-0 invert" src="{{url_for('static',filename='images/logo.png')}}" alt="">
       <form class="w-full" action="/login" method="post">
-        <input class="px-3 mt-2 py-2 border-2 bg-white border-[#ddd] dark:border-zinc-800 rounded-md block w-full dark:bg-zinc-900" type="email" placeholder="email" name="email">
-        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="password" placeholder="password" name="password">
+        <input
+          class="px-3 outline-none mt-2 py-2 border-2 bg-white border-[#ddd] dark:border-zinc-800 rounded-md block w-full dark:bg-zinc-900"
+          type="email" placeholder="email" name="email">
+        <div
+          class="password-div pr-2 items-center flex gap-2 justify-between mt-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md w-full bg-white dark:bg-zinc-900">
+          <input class="px-3 py-2 flex-1 outline-0" id="pass-input" type="password" placeholder="password" name="password">
+          <i class="bi bi-eye text-[1.4rem]" id="eye-btn"></i>
+        </div>
         <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2 text-white" type="submit" value="Log In">
       </form>
       <span>Don't have an account ? <a href="/" class="text-blue-500">Sign Up</a></span>
@@ -37,9 +50,27 @@
     let flash = document.querySelector("#flash")
     let closeBtn = document.querySelector("#cls")
 
-    closeBtn.addEventListener("click",()=>{
-      flash.style.display = "None";
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        flash.style.display = "None";
+      })
+    }
+
+    let passField = document.getElementById("pass-input")
+    let eyeBtn = document.getElementById("eye-btn")
+
+    eyeBtn.addEventListener('click', () => {
+      if (passField.type == "text") {
+        passField.type = "password";
+        eyeBtn.classList.add("bi-eye")
+        eyeBtn.classList.remove("bi-eye-slash")
+      } else {
+        passField.type = "text";
+        eyeBtn.classList.add("bi-eye-slash")
+        eyeBtn.classList.remove("bi-eye")
+      }
     })
   </script>
-  </body>
-  </html>
+</body>
+
+</html>

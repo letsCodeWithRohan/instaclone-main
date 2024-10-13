@@ -1,27 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 
 </head>
+
 <body>
-  <div class="w-full min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 flex flex-col items-center justify-center">
+  <div
+    class="w-full min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 flex flex-col items-center justify-center">
     <div class="flex flex-col items-center gap-5 px-4">
       <img class="w-1/2 dark:invert-0 invert" src="{{url_for('static',filename='images/logo.png')}}" alt="">
       <form class="w-full" action="/" method="post">
-        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="text" placeholder="username" name="username">
-        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="email" placeholder="email" name="email">
-        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="text" placeholder="name" name="name">
-        <input class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900" type="password" placeholder="password" name="password">
+        <input
+          class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900"
+          type="text" placeholder="username" name="username">
+        <input
+          class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900"
+          type="email" placeholder="email" name="email">
+        <input
+          class="px-3 mt-2 py-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md block w-full bg-white dark:bg-zinc-900"
+          type="text" placeholder="name" name="name">
+        <div
+          class="password-div pr-2 items-center flex gap-2 justify-between mt-2 border-2 border-[#ddd] dark:border-zinc-800 rounded-md w-full bg-white dark:bg-zinc-900">
+          <input class="px-3 py-2 flex-1 outline-0" id="pass-input" type="password" placeholder="password"
+            name="password">
+          <i class="bi bi-eye text-[1.4rem]" id="eye-btn"></i>
+        </div>
         <input class="w-full text-white bg-blue-500 px-3 py-3 rounded-md mt-2" type="submit" value="Make New Account">
       </form>
       <span>Already have an account ? <a href="/login" class="text-blue-500">Log In</a></span>
     </div>
   </div>
-  </body>
-  </html>
+  <script>
+    let passField = document.getElementById("pass-input")
+    let eyeBtn = document.getElementById("eye-btn")
+
+    eyeBtn.addEventListener('click', () => {
+      if (passField.type == "text") {
+        passField.type = "password";
+        eyeBtn.classList.add("bi-eye")
+        eyeBtn.classList.remove("bi-eye-slash")
+      } else {
+        passField.type = "text";
+        eyeBtn.classList.add("bi-eye-slash")
+        eyeBtn.classList.remove("bi-eye")
+      }
+    })
+  </script>
+</body>
+
+</html>
