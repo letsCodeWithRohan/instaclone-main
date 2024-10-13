@@ -10,8 +10,68 @@
         <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 
 </head>
-<body class="max-w-screen relative">
-  <div class="w-full min-h-screen dark:bg-zinc-900 bg-white dark:text-white py-5">
+<body class="max-w-screen flex relative">
+  <nav class="md:w-[20vw] dark:text-white hidden md:block bg-white dark:bg-zinc-900 left-0 top-0 sticky h-screen border-r-[1px] border-[#ddd]">
+    <img src="/static/images/logo_nav.png" class="w-[60%] invert-0 dark:invert mt-[10px] ms-[20px]" alt=""/>
+    <ul class="h-[70%] flex items-start justify-center flex-col ps-[5px] gap-[3px]">
+    <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-home-5-fill text-[1.4rem]"></i>
+        Home
+      </li>
+      </a>
+    <a href="/search" class="w-[98%] bg-slate-100 dark:bg-zinc-700 rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-search-line text-[1.4rem]"></i>
+        Search
+      </li>
+      </a>
+    <a href="/edit" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-pencil-line text-[1.4rem]"></i>
+        Edit Profile
+      </li>
+      </a>
+      <!-- Hidden used in future -->
+    <a href="/reels" class="w-[98%] hidden rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <FaPlay />
+        Reels
+      </li>
+      </a>
+    <a href="/message" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-messenger-line"></i>
+        Messages
+      </li>
+      </a>
+    <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-heart-line text-[1.4rem]"></i>
+        Notification
+      </li>
+      </a>
+    <a href="/upload" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-add-box-line"></i>
+        Create
+      </li>
+      </a>
+    <a href="/profile" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <img class="w-[30px] h-[30px] rounded-full" src="{{url_for('static',filename=session['profile'])}}">
+        Profile
+      </li>
+      </a>
+    </ul>
+    <a href="/more" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[15px] rounded-[10px] gap-[15px]">
+        <i class="ri-menu-line ri-add-box-line"></i>
+        More
+      </li>
+      </a>
+  </nav>
+  <div class="w-full md:w-[80vw] min-h-screen dark:bg-zinc-900 bg-white dark:text-white py-5">
       <div class="nav flex justify-between items-center px-4">
         <div class="lf flex gap-5 items-center">
           <a href="/feed">
@@ -25,7 +85,7 @@
         </div>
       </div>
       <div class="flex justify-between items-center pl-6 pr-[12vw] mt-8">
-        <div class="w-[19vw] h-[19vw] bg-sky-100 rounded-full overflow-hidden">
+        <div class="w-[19vw] md:h-[10vw] md:w-[10vw] h-[19vw] bg-sky-100 rounded-full overflow-hidden">
           <img class="w-full h-full object-cover" src="{{url_for('static',filename=userdata[5])}}" alt="">
         </div>
         <div class="stats flex gap-5 items-center justify-between">
@@ -60,7 +120,7 @@
          {% endif %}
       </div>
       {% endif %}
-      <div class="mt-3 bg-white flex justify-between gap-1 bg-white dark:bg-zinc-900 dark:text-white">
+      <div class="mt-3 flex justify-between gap-1 bg-white dark:bg-zinc-900 dark:text-white">
         <p class="w-1/2 h-[60px] text-center pt-3 border-b-[4px] border-[#000] dark:border-[#fff]">
           <i class="text-[1.4rem] bi bi-grid-3x3"></i>
         </p>
@@ -72,9 +132,9 @@
         <!-- Post Of Desired User -->
         {% if userposts and userposts|length > 0 %}
         {% for p_id,post in userposts %}
-            <div class="post w-[32.5%] h-32 bg-sky-100">
+            <a href="/userprofile_flex/{{userdata[0]}}#post{{p_id}}" class="post md:h-[25vw] w-[32.5%] h-32 bg-sky-100">
               <img class="w-full h-full object-cover" src="{{ url_for('static',filename=post) }}" alt="">
-            </div>
+            </a>
             {% endfor %}
             {% else %}
           <div class="w-full flex justify-center items-center min-h-[20vh]">

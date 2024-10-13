@@ -9,9 +9,69 @@
         <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 
 </head>
-<body class="">
-  <div class="w-full min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 overflow-hidden">
-    <div class="w-full px-4 flex items-center justify-between">
+<body class="flex relative">
+  <nav class="md:w-[20vw] dark:text-white hidden md:block bg-white dark:bg-zinc-900 left-0 top-0 sticky h-screen border-r-[1px] border-[#ddd]">
+    <img src="/static/images/logo_nav.png" class="w-[60%] invert-0 dark:invert mt-[10px] ms-[20px]" alt=""/>
+    <ul class="h-[70%] flex items-start justify-center flex-col ps-[5px] gap-[3px]">
+    <a href="/feed" class="w-[98%] bg-slate-100 dark:bg-zinc-700 rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-home-5-fill text-[1.4rem]"></i>
+        Home
+      </li>
+      </a>
+    <a href="/search" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-search-line text-[1.4rem]"></i>
+        Search
+      </li>
+      </a>
+    <a href="/edit" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-pencil-line text-[1.4rem]"></i>
+        Edit Profile
+      </li>
+      </a>
+      <!-- Hidden used in future -->
+    <a href="/reels" class="w-[98%] hidden rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <FaPlay />
+        Reels
+      </li>
+      </a>
+    <a href="/message" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-messenger-line"></i>
+        Messages
+      </li>
+      </a>
+    <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-heart-line text-[1.4rem]"></i>
+        Notification
+      </li>
+      </a>
+    <a href="/upload" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-add-box-line"></i>
+        Create
+      </li>
+      </a>
+    <a href="/profile" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <img class="w-[30px] h-[30px] rounded-full" src="{{url_for('static',filename=session['profile'])}}">
+        Profile
+      </li>
+      </a>
+    </ul>
+    <a href="/more" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[15px] rounded-[10px] gap-[15px]">
+        <i class="ri-menu-line ri-add-box-line"></i>
+        More
+      </li>
+      </a>
+  </nav>
+  <div class="w-full md:w-[80vw] min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 overflow-hidden">
+    <div class="w-full md:hidden px-4 flex items-center justify-between">
       <img class="w-1/4 dark:invert-0 invert" src="{{url_for('static',filename='images/logo.png')}}" alt="">
       <div class="icons -mt-2 flex gap-5 items-center">
         <i class="text-[1.4rem] ri-heart-3-line"></i>
@@ -21,23 +81,13 @@
       </div>
     </div>
     <div class="story px-3 flex gap-3 overflow-auto mt-5">
-      <a href="/story">
-        <div class="circle flex-shrink-0">
-          <div
-            class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-              <img class="w-full h-full object-cover" src="/images/uploads/<%= user.picture %>" alt="">
-            </div>
-          </div>
-        </div>
-      </a>
-      {% for i in range(4) %}
-        <a href="/story/<%= story.id %>">
+      {% for i in range(10) %}
+        <a href="/story/">
           <div class="circle flex-shrink-0">
             <div
-              class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+              class="gradient md:w-[50px] md:h-[50px] w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
               <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                <img class="w-full h-full object-cover" src="" alt="">
+                <img class="w-full h-full object-cover" src="{{url_for('static',filename=session['profile'])}}" alt="">
               </div>
             </div>
           </div>
@@ -48,7 +98,7 @@
       {% for user_id,username,profile,post_id,caption,date,postURL,like_count in postdata %}
         <div class="post mt-10 w-full min-h-[50vh]">
           <div class="title px-4 flex items-center gap-2">
-            <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
+            <div class="w-[9vw] h-[9vw] md:w-[45px] md:h-[45px] bg-sky-100 rounded-full overflow-hidden">
               <img class="w-full h-full object-cover" src="{{url_for('static',filename=profile)}}" class="">
             </div>
             <a class="text-sm" href="/userprofile/{{user_id}}">
@@ -58,8 +108,8 @@
               {{ date }}
             </h6>
           </div>
-          <div class="relative w-full h-96 mt-4 bg-sky-100 overflow-hidden">
-            <img data-postid="{{post_id}}" loading="lazy" class="postimg w-full h-full object-cover"
+          <div class="relative w-full md:h-[50vw] h-96 mt-4 bg-slate-200 dark:bg-zinc-800 overflow-hidden">
+            <img data-postid="{{post_id}}" loading="lazy" class="postimg md:ms-[15vw] md:w-[50vw] w-full h-full object-cover"
               src="{{ url_for('static',filename = postURL) }}" alt="">
           </div>
           <!-- Likes Section -->

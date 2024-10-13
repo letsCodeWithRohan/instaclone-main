@@ -11,10 +11,70 @@
     <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 </head>
 
-<body class="font-[Outfit] relative">
-    <div class="w-full overflow-y-auto flex flex-col justify-between overflow-hidden h-[100dvh] bg-white dark:bg-zinc-900 dark:text-white">
+<body class="font-[Outfit] relative flex">
+    <nav class="md:w-[20vw] dark:text-white hidden md:block bg-white dark:bg-zinc-900 left-0 top-0 sticky h-screen border-r-[1px] border-[#ddd]">
+        <img src="/static/images/logo_nav.png" class="w-[60%] invert-0 dark:invert mt-[10px] ms-[20px]" alt=""/>
+        <ul class="h-[70%] flex items-start justify-center flex-col ps-[5px] gap-[3px]">
+        <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="ri-home-5-fill text-[1.4rem]"></i>
+            Home
+          </li>
+          </a>
+        <a href="/search" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="ri-search-line text-[1.4rem]"></i>
+            Search
+          </li>
+          </a>
+        <a href="/edit" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="ri-pencil-line text-[1.4rem]"></i>
+            Edit Profile
+          </li>
+          </a>
+          <!-- Hidden used in future -->
+        <a href="/reels" class="w-[98%] hidden rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <FaPlay />
+            Reels
+          </li>
+          </a>
+        <a href="/message" class="w-[98%] bg-slate-100 dark:bg-zinc-700 rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="text-[1.4rem] ri-messenger-line"></i>
+            Messages
+          </li>
+          </a>
+        <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="ri-heart-line text-[1.4rem]"></i>
+            Notification
+          </li>
+          </a>
+        <a href="/upload" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <i class="text-[1.4rem] ri-add-box-line"></i>
+            Create
+          </li>
+          </a>
+        <a href="/profile" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+            <img class="w-[30px] h-[30px] rounded-full" src="{{url_for('static',filename=session['profile'])}}">
+            Profile
+          </li>
+          </a>
+        </ul>
+        <a href="/more" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+          <li class="flex items-center w-full h-[50px] py-[5px] px-[15px] rounded-[10px] gap-[15px]">
+            <i class="ri-menu-line ri-add-box-line"></i>
+            More
+          </li>
+          </a>
+      </nav>
+    <div class="w-full md:w-[80vw] overflow-y-auto flex flex-col justify-between overflow-hidden h-[100dvh] bg-white dark:bg-zinc-900 dark:text-white">
         <!-- Top Bar -->
-        <div class="nav flex z-60 items-center px-4 absolute top-2 w-full left-0 py-2 gap-3 shadow-md">
+        <div class="nav flex z-99 items-center px-4 relative top-2 w-full left-0 py-2 gap-3 shadow-md">
             <a href="/message/">
                 <i class="ri-arrow-left-line text-[1.4rem]"></i>
             </a>
@@ -23,13 +83,27 @@
             <h3 class="text-lg">{{userdata["username"]}}</h3>
         </div>
 
+        <section class="flex-1 overflow-y-auto mt-3">
+
         <!-- Main -->
-        <main class="z-4 message-div px-3 py-[85px] md:px-5 items-end gap-2 justify-end flex-1 flex flex-col">
-            
+        <main class="z-4 message-div px-3 py-3 md:px-5 items-end w-full gap-2 justify-end flex flex-col">
+            {% if prevMsg %}
+            {% for msg in prevMsg %}
+                {% if msg["sender"] == session["id"]|int %}
+                <p class="py-2 px-3 z-30 bg-violet-700 text-white rounded-tl-full rounded-tr-full rounded-bl-full self-end text-wrap">{{msg['message']}}</p>
+                {% else %}
+                <p class="py-2 px-3 z-30 dark:bg-zinc-700 dark:text-white bg-slate-200 text-black rounded-tr-full rounded-tl-full rounded-br-full self-start text-wrap">{{msg['message']}}</p>
+                {% endif %}
+            {% endfor %}
+            {% else %}
+            <p>No Previous Msgs</p>
+            {% endif %}
         </main>
+    </section>
+
         <!-- Bottom Bar -->
         <form
-            class="dark:bg-zinc-800 z-50 absolute bottom-2 left-0 bottom-div w-[96%] mx-[2%] ps-4 gap-3 p-2 flex justify-between bg-slate-200 items-center rounded-full my-[10px]">
+            class="dark:bg-zinc-800 z-50 relative bottom-2 left-0 bottom-div w-[96%] mx-[2%] ps-4 gap-3 p-2 flex justify-between bg-slate-200 items-center rounded-full my-[10px]">
             <input type="text" id="messageInput" name="message" placeholder="Message..."
                 class="text-black dark:text-white py-1 px-2 flex-1 bg-transparent border-0 outline-0">
             <button id="sendBtn" type="button"
@@ -40,7 +114,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        const socket = io.connect('http://192.168.179.86:5000');
+        const socket = io.connect('http://{{ip_address}}:5000');
     
     const userId = "{{ loggedInId }}";
     const otherUserId = "{{ user_id }}";

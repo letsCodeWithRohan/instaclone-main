@@ -9,13 +9,71 @@
         <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
 
 </head>
-<body>
-
+<body class="flex relative">
+  <nav class="md:w-[20vw] dark:text-white hidden md:block bg-white dark:bg-zinc-900 left-0 top-0 sticky h-screen border-r-[1px] border-[#ddd]">
+    <img src="/static/images/logo_nav.png" class="w-[60%] invert-0 dark:invert mt-[10px] ms-[20px]" alt=""/>
+    <ul class="h-[70%] flex items-start justify-center flex-col ps-[5px] gap-[3px]">
+    <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-home-5-fill text-[1.4rem]"></i>
+        Home
+      </li>
+      </a>
+    <a href="/search" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-search-line text-[1.4rem]"></i>
+        Search
+      </li>
+      </a>
+    <a href="/edit" class="w-[98%] bg-slate-100 dark:bg-zinc-700 rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-pencil-line text-[1.4rem]"></i>
+        Edit Profile
+      </li>
+      </a>
+      <!-- Hidden used in future -->
+    <a href="/reels" class="w-[98%] hidden rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <FaPlay />
+        Reels
+      </li>
+      </a>
+    <a href="/message" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-messenger-line"></i>
+        Messages
+      </li>
+      </a>
+    <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="ri-heart-line text-[1.4rem]"></i>
+        Notification
+      </li>
+      </a>
+    <a href="/upload" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <i class="text-[1.4rem] ri-add-box-line"></i>
+        Create
+      </li>
+      </a>
+    <a href="/profile" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">  
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+        <img class="w-[30px] h-[30px] rounded-full" src="{{url_for('static',filename=session['profile'])}}">
+        Profile
+      </li>
+      </a>
+    </ul>
+    <a href="/more" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+      <li class="flex items-center w-full h-[50px] py-[5px] px-[15px] rounded-[10px] gap-[15px]">
+        <i class="ri-menu-line ri-add-box-line"></i>
+        More
+      </li>
+      </a>
+  </nav>
 <form hidden id="fileform" method="post" enctype="multipart/form-data" action="/upload">
   <input id="file" type="file" name="image">
-</form>
-  
-<div class="w-full min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 font-[Outfit]">
+</form> 
+<div class="w-full md:w-[80vw] min-h-screen bg-white dark:bg-zinc-900 dark:text-white py-5 font-[Outfit]">
     <div class="flex justify-between items-center px-4">
       <a class="text-sm text-blue-500" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
       <h2 class="leading-none text-sm">Edit Profile</h2>

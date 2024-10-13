@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from flask_socketio import SocketIO,join_room,leave_room,send
 from flask_cors import CORS
 import os
+import socket
 
 app = Flask(__name__)
 CORS(app)
@@ -146,6 +147,7 @@ def upload():
                 cursor = mysql.connection.cursor()
                 cursor.execute("UPDATE users SET picture=%s WHERE id = %s",("uploads/"+picture.filename,session["id"]))
                 mysql.connection.commit()
+                session["profile"] = "uploads/"+picture.filename
                 cursor.close()
                 return redirect(url_for("profile"))
 
@@ -348,7 +350,22 @@ def chat(id):
     userdata["id"] = id
     userdata["username"] = data[0]
     userdata["profile"] = data[1]
-    return render_template("chat.html",userdata=userdata,user_id=id,loggedInId=session["id"])
+    cursor.execute('''SELECT message, sender_id, receiver_id 
+    FROM messages 
+    WHERE (sender_id = %s AND receiver_id = %s) 
+    OR (sender_id = %s AND receiver_id = %s) 
+    ORDER BY timestamp''',(session['id'],id,id,session['id']))
+    old_msg = cursor.fetchall()
+    prevMsg = []
+    for msg in old_msg:
+        dct = {}
+        dct["message"] = msg[0]
+        dct["sender"] = msg[1]
+        dct["receiver"] = msg[2]
+        prevMsg.append(dct)
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    return render_template("chat.html",userdata=userdata,user_id=id,ip_address=ip_address,loggedInId=session["id"],prevMsg=prevMsg)
 
 @socketio.on('join')
 def on_join(data):
