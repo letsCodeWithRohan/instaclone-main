@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='stylesheets/output.css')}}">
+
+</head>
+
+<body class="flex relative">
+    <nav
+        class="md:w-[20vw] dark:text-white hidden md:block bg-white dark:bg-zinc-900 left-0 top-0 sticky h-screen border-r-[1px] border-[#ddd]">
+        <a href="/feed"><img src="/static/images/logo_nav.png" class="w-[60%] invert-0 dark:invert mt-[10px] ms-[20px]"
+                alt="" /></a>
+
+        <ul class="h-[70%] flex items-start justify-center flex-col ps-[5px] gap-[3px]">
+            <a href="/feed" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="ri-home-5-fill text-[1.4rem]"></i>
+                    Home
+                </li>
+            </a>
+            <a href="/search"
+                class="w-[98%] bg-slate-100 dark:bg-zinc-700 rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="ri-search-line text-[1.4rem]"></i>
+                    Search
+                </li>
+            </a>
+            <a href="/edit" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="ri-pencil-line text-[1.4rem]"></i>
+                    Edit Profile
+                </li>
+            </a>
+            <!-- Hidden used in future -->
+            <a href="/reels"
+                class="w-[98%] hidden rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <FaPlay />
+                    Reels
+                </li>
+            </a>
+            <a href="/message" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="text-[1.4rem] ri-messenger-line"></i>
+                    Messages
+                </li>
+            </a>
+            <a href="/notification" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="ri-heart-line text-[1.4rem]"></i>
+                    Notification
+                </li>
+            </a>
+            <a href="/upload" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <i class="text-[1.4rem] ri-add-box-line"></i>
+                    Create
+                </li>
+            </a>
+            <a href="/profile" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+                <li class="flex items-center w-full h-[50px] py-[5px] px-[10px] rounded-[10px] gap-[15px]">
+                    <img class="w-[30px] h-[30px] rounded-full" src="{{url_for('static',filename=session['profile'])}}">
+                    Profile
+                </li>
+            </a>
+        </ul>
+        <a href="/more" class="w-[98%] rounded-[10px] text-[17px] dark:hover:bg-zinc-700 hover:bg-slate-100">
+            <li class="flex items-center w-full h-[50px] py-[5px] px-[15px] rounded-[10px] gap-[15px]">
+                <i class="ri-menu-line ri-add-box-line"></i>
+                More
+            </li>
+        </a>
+    </nav>
+    <div class="w-full md:w-[80vw] min-h-screen bg-white dark:bg-zinc-900 px-4 py-5 dark:text-white">
+    <div class="flex flex-col gap-3 items-center h-full justify-center">
+        <img src="/static/images/construction.jpg" alt="" class="w-[30%]">
+        <h1 class="font-bold text-2xl md:text-4xl dark:text-white">Page Under Construction !</h1>
+        <h3 class="font-semibold text-lg md:text-2xl dark:text-white">Currently Available Now</h3>
+        <a href="/feed" class="dark:text-white hover:bg-violet-800 hover:text-white py-2 px-4 rounded-full bg-slate-100 dark:bg-zinc-700">Go to Home</a>
+    </div>
+    </div>
+    </div>
+    {% include 'partials/footer.html' %}
+</body>
+
+</html>

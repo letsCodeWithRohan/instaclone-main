@@ -413,6 +413,18 @@ def logout():
         return redirect(url_for("login"))
     else :
         return redirect(url_for("login"))
+    
+@app.route("/more")
+def more():
+    return redirect(url_for("under_const"))
+
+@app.route("/notification")
+def notification():
+    return redirect(url_for("under_const"))
+    
+@app.route("/under-construction")
+def under_const():
+    return render_template("construction.html")
 
 if __name__ == "__main__" :
     socketio.run(app, debug=True,host='0.0.0.0')
